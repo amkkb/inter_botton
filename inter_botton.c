@@ -20,10 +20,9 @@ static int key_driver_read (struct file * file, char __user * buf, size_t size, 
 	if(size != 1)
 		return -EINVAL;
 	/* 如果没有按键安动作，休眠，如果有按键按下，就直接返回*/
-	//wait_event_interruptible(boutton_qeueue,en_press);
 	
 	ret = copy_to_user(buf,&key_val,1);
-	//en_press = 0;	
+
 	
 	return 1;
 
@@ -48,9 +47,7 @@ static irqreturn_t button_irq(int irq, void *dev_id)
 			//printk("kernel anxia key_val  = 0x%x\n",key_val);//调试用的
 		}
 
-	//en_press = 1; //表示中断发生
-	//wake_up_interruptible(&boutton_qeueue);//唤醒休眠的进程
-	//kill_fasync(&key_async_queue, SIGIO, POLL_IN);
+
 	return IRQ_HANDLED;
 }
 
@@ -73,9 +70,7 @@ static const struct file_operations key_driver_fops =
   .owner   = THIS_MODULE,
   .read    = key_driver_read,
   .open    = key_driver_open,
-  //.release = key_driver_close,
- // .poll	   = key_driver_poll,
- // .fasync  = key_driver_fasync,
+  
 };
 
 
